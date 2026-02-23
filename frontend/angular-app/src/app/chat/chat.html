@@ -1,0 +1,30 @@
+<div style="max-width:600px;margin:auto">
+
+    <h2>PromptAI Chat</h2>
+
+    <div style="border:1px solid #ccc;height:300px;overflow:auto;padding:10px">
+        <div *ngFor="let msg of messages" [style.textAlign]="msg.author === 'user' ? 'right' : 'left'">
+
+            <span [style.background]="msg.author === 'user' ? '#DCF8C6' : '#EEE'"
+                style="padding:6px 10px;border-radius:8px;display:inline-block;margin:4px">
+
+                {{ msg.text }}
+
+            </span>
+        </div>
+
+
+    </div>
+
+    <br>
+
+    <input [(ngModel)]="message" placeholder="Digite sua mensagem..." style="width:80%" (keyup.enter)="send()" />
+
+    <button (click)="send()">Enviar</button>
+
+    <select [(ngModel)]="selectedProvider">
+        <option value="gpt">GPT</option>
+        <option value="gemini">Gemini</option>
+    </select>
+
+</div>
