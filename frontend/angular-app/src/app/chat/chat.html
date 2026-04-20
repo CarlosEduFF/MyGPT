@@ -1,30 +1,130 @@
-<div style="max-width:600px;margin:auto">
+<div class="flex h-screen w-full">
+    <!-- Sidebar -->
+    <aside class="w-72 flex flex-col bg-[#0b0f18] border-r border-white/5 h-full">
+        <!-- New Chat Button -->
+        <div class="p-4">
+            <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg font-medium transition-all group">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                <span>New Chat</span>
+                <span class="ml-auto text-xs opacity-50 group-hover:opacity-100">⌘N</span>
+            </button>
+        </div>
+        <!-- Navigation / History -->
+        <nav class="flex-1 overflow-y-auto px-3 custom-scrollbar">
+            <div class="mb-6">
+                <h3 class="px-3 text-[11px] font-bold text-white/30 uppercase tracking-widest mb-2">Today</h3>
+                <div class="space-y-1">
+                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/5 text-sm group" href="#">
+                        <span class="material-symbols-outlined text-[18px] text-white/50 group-hover:text-primary">chat_bubble</span>
+                        <span class="truncate">Angular App Integration</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <!-- Bottom Profile & Settings -->
+        <div class="mt-auto border-t border-white/5 p-4 space-y-2">
+            <button class="w-full flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="size-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZRIl3GqUk2sYVP4pz5Y3654NYTMym3NtaXJNO8UVvxWjOvgfBfrHbmCbfDg6H16F-ZQ8EJYoOEq2TmrQqX0zfsggfz229vhxT03uxiox7U7UxOmZtYwfEYfIhXKrJqOxRD3M_PnCQds1iLSt1SrZGNIJhoyUAPSKwB-p8G8Dq8CtJeNMUll-rmfVDqyslnXkE3TcivTSrtSEPi7h4lRlFsA5R5msUw8MYCkDNMpdcN_EFSfVvfpjqgZYVy1xSFxyuokTGfkjYf7Ob" />
+                    </div>
+                    <div class="text-left">
+                        <p class="text-xs font-semibold">User Profile</p>
+                        <p class="text-[10px] text-primary">Pro Plan</p>
+                    </div>
+                </div>
+                <span class="material-symbols-outlined text-[18px] text-white/40">more_vert</span>
+            </button>
+            <div class="flex gap-2">
+                <button class="flex-1 flex items-center justify-center py-2 hover:bg-white/5 rounded-lg text-white/60">
+                    <span class="material-symbols-outlined text-[20px]">settings</span>
+                </button>
+                <button class="flex-1 flex items-center justify-center py-2 hover:bg-white/5 rounded-lg text-white/60">
+                    <span class="material-symbols-outlined text-[20px]">help</span>
+                </button>
+            </div>
+        </div>
+    </aside>
 
-    <h2>PromptAI Chat</h2>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col relative bg-background-dark">
+        <!-- Header: Model Selector -->
+        <header class="h-16 flex items-center justify-center border-b border-white/5 px-6 shrink-0 z-10 bg-background-dark/80 backdrop-blur-md">
+            <div class="flex bg-white/5 p-1 rounded-full border border-white/5">
+                <button (click)="selectedProvider = 'gpt'" [ngClass]="selectedProvider === 'gpt' ? 'bg-primary text-white' : 'text-white/50 hover:text-white'" class="px-4 py-1.5 rounded-full text-xs font-medium transition-all">GPT-4</button>
+                <button (click)="selectedProvider = 'gemini'" [ngClass]="selectedProvider === 'gemini' ? 'bg-primary text-white' : 'text-white/50 hover:text-white'" class="px-4 py-1.5 rounded-full text-xs font-medium transition-all">Gemini</button>
+            </div>
+        </header>
 
-    <div style="border:1px solid #ccc;height:300px;overflow:auto;padding:10px">
-        <div *ngFor="let msg of messages" [style.textAlign]="msg.author === 'user' ? 'right' : 'left'">
+        <!-- Chat Feed -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar px-4" #scrollContainer>
+            <div class="max-w-3xl mx-auto py-10 space-y-8">
+                
+                <div *ngIf="messages.length === 0" class="text-center text-white/30 pt-20">
+                    <span class="material-symbols-outlined text-6xl mb-4">forum</span>
+                    <p>Comece uma conversa com a IA usando o {{selectedProvider | uppercase}}</p>
+                </div>
 
-            <span [style.background]="msg.author === 'user' ? '#DCF8C6' : '#EEE'"
-                style="padding:6px 10px;border-radius:8px;display:inline-block;margin:4px">
+                <div *ngFor="let msg of messages">
+                    
+                    <!-- User Message -->
+                    <div *ngIf="msg.author === 'user'" class="flex flex-col items-end gap-2 group">
+                        <div class="bg-primary px-4 py-3 rounded-2xl rounded-tr-none max-w-[85%] text-sm leading-relaxed shadow-lg shadow-primary/10 whitespace-pre-wrap">{{ msg.text }}</div>
+                    </div>
 
-                {{ msg.text }}
+                    <!-- Assistant Message -->
+                    <div *ngIf="msg.author === 'ai'" class="flex gap-4 group">
+                        <div class="size-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
+                            <span class="material-symbols-outlined text-[20px] text-primary">auto_awesome</span>
+                        </div>
+                        <div class="flex-1 space-y-4 max-w-[85%]">
+                            <div class="text-sm leading-relaxed text-white/90 whitespace-pre-wrap">{{ msg.text }}</div>
+                        </div>
+                    </div>
 
-            </span>
+                </div>
+
+                <!-- Assistant Message (typing state) -->
+                <div *ngIf="isTyping" class="flex gap-4 animate-pulse">
+                    <div class="size-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
+                        <span class="material-symbols-outlined text-[20px] text-primary">auto_awesome</span>
+                    </div>
+                    <div class="flex gap-1 py-3">
+                        <div class="size-1.5 rounded-full bg-white/20"></div>
+                        <div class="size-1.5 rounded-full bg-white/40"></div>
+                        <div class="size-1.5 rounded-full bg-white/20"></div>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
-
-    </div>
-
-    <br>
-
-    <input [(ngModel)]="message" placeholder="Digite sua mensagem..." style="width:80%" (keyup.enter)="send()" />
-
-    <button (click)="send()">Enviar</button>
-
-    <select [(ngModel)]="selectedProvider">
-        <option value="gpt">GPT</option>
-        <option value="gemini">Gemini</option>
-    </select>
-
+        <!-- Input Section -->
+        <div class="p-6 bg-gradient-to-t from-background-dark via-background-dark to-transparent">
+            <div class="max-w-3xl mx-auto relative group">
+                <div class="absolute inset-0 bg-primary/20 blur-xl rounded-2xl opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+                <div class="relative bg-white/5 border border-white/10 rounded-2xl p-2 shadow-2xl backdrop-blur-sm transition-all group-focus-within:border-primary/50 group-focus-within:ring-1 group-focus-within:ring-primary/50">
+                    <textarea 
+                        [(ngModel)]="message" 
+                        (keyup.enter)="onEnter($event)"
+                        class="w-full bg-transparent border-none focus:ring-0 text-sm py-3 px-4 resize-none max-h-48 custom-scrollbar text-white placeholder-white/30 outline-none" 
+                        placeholder="Mensagem..." 
+                        rows="1"></textarea>
+                    
+                    <div class="flex items-center justify-between px-2 pb-1">
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 hover:bg-white/10 rounded-lg text-white/40 hover:text-white transition-all"><span class="material-symbols-outlined text-[20px]">attach_file</span></button>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[10px] text-white/20 font-medium">{{selectedProvider | uppercase}} Active</span>
+                            <button (click)="send()" class="bg-primary hover:bg-primary/80 text-white p-2 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[22px]">arrow_upward</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-[10px] text-white/20 mt-3">A IA pode cometer erros. Verifique as informações importantes.</p>
+            </div>
+        </div>
+    </main>
 </div>

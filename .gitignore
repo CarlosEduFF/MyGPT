@@ -1,7 +1,14 @@
+# Ambientes
 .env
-.env.local
-.env.development
-.env.production
-.env.test
+.env.*
+
+# Node / Angular
+**/node_modules/
 node_modules/
 dist/
+.angular/
+
+# Python
+venv/
+__pycache__/
+*.pyc

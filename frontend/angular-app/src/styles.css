@@ -1,3 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #2b6cee;
+  --color-background-light: #f6f6f8;
+  --color-background-dark: #101622;
+  --font-display: "Inter", sans-serif;
+  --radius-full: 9999px;
+  --radius-xl: 0.75rem;
+  --radius-lg: 0.5rem;
+  --radius: 0.25rem;
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
